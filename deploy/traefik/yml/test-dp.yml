@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: test
+  namespace: default
+  labels:
+    test: alpine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      test: alpine
+  template:
+    metadata:
+      labels:
+        test: alpine
+        name: test
+    spec:
+      containers:
+      - image: mritd/alpine:3.4
+        name: alpine
+        resources:
+          limits:
+            cpu: 200m
+            memory: 30Mi
+          requests:
+            cpu: 100m
+            memory: 20Mi
+        ports:
+        - name: http
+          containerPort: 80
+        args:
+        command:
+        - "bash"
+        - "-c"
+        - "echo ok > /tmp/health;sleep 120;rm -f /tmp/health"
+        livenessProbe:
+          exec:
+            command:
+            - cat
+            - /tmp/health
+          initialDelaySeconds: 20

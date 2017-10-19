@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dashboard-weblogic-ingress
+  namespace: kube-system
+spec:
+  rules:
+  - host: helloworld.eric
+    http:
+      paths:
+      - path: /console
+        backend:
+          serviceName: helloworldsvc
+          servicePort: 7001
+      - path: /
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
